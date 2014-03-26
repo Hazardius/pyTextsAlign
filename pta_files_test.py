@@ -5,9 +5,9 @@ import unittest
 
 from pta_files import open_file
 
-class PTAFiles(unittest.TestCase):
+class pta_files_tests(unittest.TestCase):
 
-    def test_open_file_correct_txt(self):
+    def test_opening_of_correct_txt(self):
         self.maxDiff = None
         results = open_file("example_files/Birds in a Cage.txt")
         expected = [u"\"Why do you weep?\" inquired the young siskin of the old,\n",
@@ -15,3 +15,7 @@ class PTAFiles(unittest.TestCase):
           u"\"You were born caged,\" said the elder, \"this was your morrow;\n",
           "\"I was free, now I'm caged—hence the cause of my sorrow.\"\n"]
         self.assertEqual(expected, results)
+
+if __name__ == '__main__':
+    unittest.main()
+
