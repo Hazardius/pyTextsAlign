@@ -1,23 +1,26 @@
 ﻿#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import json
 import urllib
+import urllib2
+import string
 import sys
 
 """ This file contains sentence splitting methods used by a pyTextsAlign. """
 
-def sentence_splitting(sentence):
+def psi_toolkit_api_sentence_splitting(sentence, l_code):
     """Dumb way to split sentence. Split on every dot, question and
     exclamation mark."""
-    temp_set = { "value" : sentence.replace(" ", "+").encode(sys.stdout.encoding) }
-    address = "http://mrt.wmi.amu.edu.pl/json.psis?pipe=segment+--lang pl+!" +\
-        "+write-simple+--tags+segment&" + urllib.urlencode(temp_set)
-    print address
+    host = "http://mrt.wmi.amu.edu.pl/json.psis?pipe=segment+--lang+" + l_code \
+        + "+!+json-simple-writer+--tags+segment+&input=" + sentence.\
+        encode("utf-8").replace(' ', '+')
     try:
-        urlobject = urllib2.urlopen(address)
-        urlcontent = urlobject.read()
+        req = urllib2.Request(host)
+        response_stream = urllib2.urlopen(req)
+        json_response = response_stream.read()
+        json_dic = json.loads(json_response)
+        return [string.lstrip(sentence) for sentence in json_dic[u'output']]
     except:
-        print "\tCould not open '%s'" % address
-        return set()
-    print urlcontent
-    return urlcontent
+        print "\tCould not open '%s'" % host
+        return []
