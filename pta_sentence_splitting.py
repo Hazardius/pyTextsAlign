@@ -12,7 +12,7 @@ import sys
 def psi_toolkit_api_sentence_splitting(sentence, l_code):
     """Dumb way to split sentence. Split on every dot, question and
     exclamation mark."""
-    host = "http://mrt.wmi.amu.edu.pl/json.psis?pipe=segment+--lang+" + l_code \
+    host = "http://mrt.wmi.amu.edu.pl/json.psis?pipe=segment+--lang+" + l_code\
         + "+!+json-simple-writer+--tags+segment+&input=" + sentence.\
         encode("utf-8").replace(' ', '+')
     try:
