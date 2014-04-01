@@ -23,3 +23,4 @@ def naive_alignment(l1_sentences, l2_sentences):
         else:
             list.append(([], [l2_sentences[itera + shorter_l]]))
     return list
+    
