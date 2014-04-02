@@ -9,10 +9,10 @@ class pta_sentence_splitting_tests(unittest.TestCase):
 
     def test_english_pt_sentence_splitting_test(self):
         self.maxDiff = None
-        english_sentence = u"It was a MSc. Bartholomew Czeci. He mastered " +\
+        english_sentence = u"It was a M.Sc. Bartholomew Czeci. He mastered " +\
             u"among others Nietzsche. It is difficult to determine why Mr. " +\
             u"Bronek suddenly disappeared."
-        expected = [u"It was a MSc.", u"Bartholomew Czeci.", u"He mastered " +\
+        expected = [u"It was a M.Sc.", u"Bartholomew Czeci.", u"He mastered " +\
             u"among others Nietzsche.", u"It is difficult to determine why " +\
             u"Mr. Bronek suddenly disappeared."]
         results = ptass(english_sentence, "en")
