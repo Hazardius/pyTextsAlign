@@ -7,7 +7,7 @@ from pta_sentence_splitting import psi_toolkit_api_sentence_splitting as ptass
 
 class pta_sentence_splitting_tests(unittest.TestCase):
 
-    def test_english_pt_sentence_splitting_test(self):
+    def test_english_pt_sentence_splitting(self):
         self.maxDiff = None
         english_sentence = u"It was a M.Sc. Bartholomew Czeci. He mastered " +\
             u"among others Nietzsche. It is difficult to determine why Mr. " +\
@@ -18,7 +18,7 @@ class pta_sentence_splitting_tests(unittest.TestCase):
         results = ptass(english_sentence, "en")
         self.assertEqual(expected, results)
 
-    def test_polish_pt_sentence_splitting_test(self):
+    def test_polish_pt_sentence_splitting(self):
         self.maxDiff = None
         polish_sentence = u"Był to mgr inż. Bartłomiej Czeci. Opanował on " +\
             u"m.in. Nietzschego. Trudno jest określić dlaczego Mr. Bronek " +\
