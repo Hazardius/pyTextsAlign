@@ -1,14 +1,16 @@
 ﻿#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import re
+import math
 
 from pta_sentence_splitting import psi_toolkit_api_sentence_splitting as ptiss
-from pta_tools import enum
+from pta_tools import count_word_number, enum
 
 """ This file contains alignement methods used by a pyTextsAlign. """
 
 atype = enum(NAIVE = 0, SIMPLE = 1)
+# en, it, pl
+lang = enum(ENGLISH = 'en', ITALIAN = 'it', POLISH = 'pl')
 
 class alignment(object):
     """Simple alignment class."""
@@ -42,16 +44,56 @@ class alignment(object):
                 list_r.append([[], [l2_sentences[itera + shorter_l]]])
         return list_r
 
-    def simple_alignment(l1_sentences, l2_sentences):
+    def simple_alignment(self, l1_sentences, l2_sentences):
         """Simple but better than naive way to align sentences."""
         l1i = 0
         l1len = len(l1_sentences)
         l2i = 0
         l2len = len(l2_sentences)
         list_r = []
+        flag = False
         while (l1i != l1len and l2i != l2len):
-            l1s_len = len(re.split(r'[^0-9A-Za-z]+', l1_sentences[l1i]))
-            l2s_len = len(re.split(r'[^0-9A-Za-z]+', l2_sentences[l2i]))
-            print l1s_len
-            print l2s_len
+            (end_l1, end_l2) = self.__search_the_end__(l1_sentences,\
+                l2_sentences, l1i, l2i)
+            left = []
+            for itera in range(l1i, end_l1 + 1):
+                left.append(l1_sentences[itera])
+            right = []
+            for itera in range(l2i, end_l2 + 1):
+                right.append(l2_sentences[itera])
+            list_r.append([left, right])
+            l1i = end_l1 + 1
+            l2i = end_l2 + 1
+        return list_r
 
+    def __search_the_end__(self, l1_sentences, l2_sentences, l1i, l2i):
+        l1conc_len = count_word_number(l1_sentences[l1i])
+        l2conc_len = count_word_number(l2_sentences[l2i])
+        if l1conc_len > l2conc_len:
+            concl_len = l1conc_len
+            concs_len = l2conc_len
+            act_l = l1i
+            act_s = l2i
+            end_s = len(l2_sentences)
+            shorter_sen = l2_sentences
+        else:
+            concl_len = l2conc_len
+            concs_len = l1conc_len
+            act_l = l2i
+            act_s = l1i
+            end_s = len(l1_sentences)
+            shorter_sen = l1_sentences
+        while (concl_len - concs_len >= 3):
+            if act_s + 1 != end_s:
+                added = count_word_number(shorter_sen[act_s + 1])
+                if concl_len - concs_len - added > -3:
+                    concs_len += added
+                    act_s += 1
+                else:
+                    break
+            else:
+                break
+        if l1conc_len > l2conc_len:
+            return (act_l, act_s)
+        else:
+            return (act_s, act_l)
