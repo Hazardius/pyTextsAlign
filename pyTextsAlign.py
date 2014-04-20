@@ -4,16 +4,17 @@
 import os
 import wx
 
+MAIN_WIDTH = 500
+
 class MainWindow(wx.Frame):
 
-    all_ready = False
-
     def __init__(self, parent, title):
-        self.dirname=''
+        # self.dirname=''
+        self.all_ready=False
 
         # A "-1" in the size parameter instructs wxWidgets to use the default size.
         # In this case, we select 200px width and the default height.
-        wx.Frame.__init__(self, parent, title=title, size=(500, 500))
+        wx.Frame.__init__(self, parent, title=title, size=(MAIN_WIDTH, 500))
         #self.control = wx.TextCtrl(self, style=wx.TE_MULTILINE)
         self.CreateStatusBar() # A Statusbar in the bottom of the window
 
@@ -33,22 +34,36 @@ class MainWindow(wx.Frame):
         self.Bind(wx.EVT_MENU, self.OnExit, menuExit)
         self.Bind(wx.EVT_MENU, self.OnAbout, menuAbout)
 
-        wx.ComboBox(self, -1, "Simple Alignment", (300, 0), wx.DefaultSize, ["Naive Alignment", "Simple Alignment", "Hunalign"], wx.CB_DROPDOWN)
+        self.comboBox = wx.ComboBox(self, -1, "Simple Alignment", (MAIN_WIDTH - 200, 0), wx.DefaultSize, ["Naive Alignment", "Simple Alignment", "Hunalign"], wx.CB_DROPDOWN)
 
-        self.control = wx.GridBagSizer(hgap=5, vgap=5)
+        # TODO: Choose files paths.
+
+        # self.fltextFile = 
+
+        # self.sltextFile = 
+
+        # TODO: Add align button.
+
+        # TODO: In each row add more columns, etc.
+
+        self.control = wx.BoxSizer(wx.VERTICAL)
         for col in range(3):
-            for row in range(3):
-                bw = wx.Button(self, label="aa")
-                self.control.Add(bw, pos=(row,col))
+            bw = wx.Button(self, label=str(col + 1))
+            self.control.Add(bw)
 
         # Use some sizers to see layout options
         self.sizer = wx.BoxSizer(wx.VERTICAL)
-        self.sizer.Add(self.control, 0, wx.EXPAND)
+        self.sizer.Add(self.comboBox, 0, wx.EXPAND)
+        # self.sizer.Add(self.fltextFile, 1, wx.EXPAND)
+        # self.sizer.Add(self.sltextFile, 2, wx.EXPAND)
+        self.sizer.Add(self.control, 3, wx.EXPAND)
+
+        # TODO: Add save button.
 
         #Layout sizers
         self.SetSizer(self.sizer)
         self.SetAutoLayout(1)
-        #self.sizer.Fit(self)
+        self.sizer.Fit(self)
         self.Show()
 
     def OnAbout(self,e):

@@ -3,6 +3,7 @@
 
 import math
 
+from pta_files import save_file
 from pta_sentence_splitting import psi_toolkit_api_sentence_splitting as ptiss
 from pta_tools import count_word_number, enum
 
@@ -21,6 +22,12 @@ class alignment(object):
             self.core = self.naive_alignment(sentences1, sentences2)
         elif al_type == 1:
             self.core = self.simple_alignment(sentences1, sentences2)
+
+    def save(self, save_path):
+        """Saving of the output."""
+        # TODO: Correct way of saving content.
+        output = str(self.core)
+        save_file(save_path, output)
 
     def naive_alignment(self, l1_sentences, l2_sentences):
         """Dumb way to align sentences. 1 to 1 till the end of sentences on both
