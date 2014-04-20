@@ -25,8 +25,15 @@ class alignment(object):
 
     def save(self, save_path):
         """Saving of the output."""
-        # TODO: Correct way of saving content.
-        output = str(self.core)
+        # TODO: Test saving content.
+        output = ""
+        for coupled_sentences in self.core:
+            for sentence in coupled_sentences[0]:
+                output += '"' + sentence + '" '
+            output += "@|@ "
+            for sentence in coupled_sentences[1]:
+                output += '"' + sentence + '" '
+            output += '\n'
         save_file(save_path, output)
 
     def naive_alignment(self, l1_sentences, l2_sentences):
