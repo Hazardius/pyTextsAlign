@@ -9,7 +9,6 @@ from pta_tools import count_word_number, enum
 """ This file contains alignement methods used by a pyTextsAlign. """
 
 atype = enum(NAIVE = 0, SIMPLE = 1)
-# en, it, pl
 lang = enum(ENGLISH = 'en', ITALIAN = 'it', POLISH = 'pl')
 
 class alignment(object):
