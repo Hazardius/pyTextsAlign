@@ -1,1 +1,4 @@
 pyTextsAlign is software helping to align sentences in two language versions.
+
+Requirements:
+* psi-toolkit - http://psi-toolkit.amu.edu.pl/
