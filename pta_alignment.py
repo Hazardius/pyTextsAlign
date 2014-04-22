@@ -3,6 +3,8 @@
 
 import math
 
+from subprocess import call
+
 from pta_files import save_file
 from pta_sentence_splitting import psi_toolkit_api_sentence_splitting as ptiss
 from pta_sentence_splitting import psi_toolkit_local_sentence_splitting as ptlss
@@ -25,6 +27,8 @@ class alignment(object):
             self.core = self.naive_alignment(sentences1, sentences2)
         elif al_type == 1:
             self.core = self.simple_alignment(sentences1, sentences2)
+        elif al_type == 2:
+            self.core = self.hunalign(sentences1, sentences2)
 
     def save(self, save_path):
         """Saving of the output."""
@@ -36,7 +40,7 @@ class alignment(object):
             output += "@|@ "
             for sentence in coupled_sentences[1]:
                 output += '"' + sentence + '" '
-            output += '\n'
+            output = output[:-1:] + "\n"
         save_file(save_path, output)
 
     def naive_alignment(self, l1_sentences, l2_sentences):
@@ -80,6 +84,30 @@ class alignment(object):
             list_r.append([left, right])
             l1i = end_l1 + 1
             l2i = end_l2 + 1
+        return list_r
+
+    def hunalign(self, l1_sentences, l2_sentences):
+        """Using hunalign to alignment of sentences."""
+        # To use hunalign - must save sentences to the files.
+        l1_string = ""
+        for sent in l1_sentences:
+            l1_string += sent + "\n"
+        save_file("hun1.tmp", l1_string[:-1:])
+        l2_string = ""
+        for sent in l2_sentences:
+            l2_string += sent + "\n"
+        save_file("hun2.tmp", l2_string[:-1:])
+        # Start of hunalign
+        command = "hunalign-1.2/src/hunalign/hunalign hunalign-1.2/data/null.dic hun1.tmp hun2.tmp -bisent -text -utf > hunal.tmp"
+        return_code = call(command, shell=True)
+        list_r = []
+        f = open("hunal.tmp", 'r')
+        for line in f:
+            splitted_line = line.decode("utf-8").split("\t")
+            left = [splitted_line[0]]
+            right = [splitted_line[1]]
+            list_r.append([left, right])
+        f.close()
         return list_r
 
     def __search_the_end__(self, l1_sentences, l2_sentences, l1i, l2i):

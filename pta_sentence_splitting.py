@@ -18,7 +18,7 @@ def psi_toolkit_local_sentence_splitting(path, l_code):
     f = open("tmp.tmp", 'r')
     ret_val = ""
     for line in f:
-        ret_val += line.decode("utf-8-sig").encode("utf-8")
+        ret_val += line.decode("utf-8-sig")
     f.close()
     list_ret = ret_val[2:-2:].replace('","', "@|@").split("@|@")
     return [string.lstrip(sentence) for sentence in list_ret]
