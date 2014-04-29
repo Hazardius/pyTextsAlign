@@ -1,6 +1,7 @@
 ﻿#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import json
 import math
 
 from subprocess import call
@@ -30,9 +31,23 @@ class alignment(object):
         elif al_type == 2:
             self.core = self.hunalign(sentences1, sentences2)
 
+    def get_core(self):
+        output = ""
+        for coupled_sentences in self.core:
+            for sentence in coupled_sentences[0]:
+                output += '"' + sentence + '" '
+            output += "@|@ "
+            for sentence in coupled_sentences[1]:
+                output += '"' + sentence + '" '
+            output = output[:-1:] + "\n"
+        return output
+
     def save(self, save_path):
         """Saving of the output."""
-        # TODO: Test saving content.
+        # Test saving content.
+        # with open(save_path + '.json', 'w') as outfile:
+        #     json.dump(self.core, outfile)
+
         output = ""
         for coupled_sentences in self.core:
             for sentence in coupled_sentences[0]:

@@ -1,0 +1,143 @@
+#:kivy 1.6.0
+
+Root:
+    al_text: al_text
+    align_type: align_type
+    file_1_input: file_1_input
+    file_1_lang: file_1_lang
+    file_2_input: file_2_input
+    file_2_lang: file_2_lang
+
+    BoxLayout:
+        orientation: 'vertical'
+
+        BoxLayout:
+            size_hint_y: None
+            height: 30
+
+            Label:
+                text: "Choose method of alignment:"
+
+            Spinner:
+                id: align_type
+                text: 'Naive'
+                values: ('Naive', 'Simple', 'Hunalign')
+                size_hint: (.40, 1)
+
+        BoxLayout:
+            size_hint_y: None
+            height: 30
+
+            Button:
+                text: 'Choose file 1'
+                size_hint: (.4, 1)
+                on_release: root.show_ch1()
+
+            Spinner:
+                id: file_1_lang
+                text: 'en'
+                values: ('en', 'it', 'pl')
+                size_hint: (.25, 1)
+
+            TextInput:
+                id: file_1_input
+                text: ''
+                readonly: True
+
+        BoxLayout:
+            size_hint_y: None
+            height: 30
+
+            Button:
+                text: 'Choose file 2'
+                size_hint: (.4, 1)
+                on_release: root.show_ch2()
+
+            Spinner:
+                id: file_2_lang
+                text: 'en'
+                values: ('en', 'it', 'pl')
+                size_hint: (.25, 1)
+
+            TextInput:
+                id: file_2_input
+                text: ''
+                readonly: True
+
+        BoxLayout:
+            size_hint_y: None
+            height: 30
+
+            Button:
+                text: 'Align both texts'
+                on_release: root.align()
+
+        ScrollView:
+            do_scroll_x: False
+
+            GridLayout:
+                cols: 1
+
+                TextInput:
+                    id: al_text
+                    text: ''
+                    hint_text: 'Correct lines:\n"Sentence1.", "Sentence2." @|@ "Sentence1+2."'
+
+        BoxLayout:
+            size_hint_y: None
+            height: 30
+
+            Button:
+                text: 'Save'
+                on_release: root.show_save()
+
+<LoadDialog>:
+    BoxLayout:
+        size: root.size
+        pos: root.pos
+        orientation: "vertical"
+
+        FileChooserListView:
+            id: filechooser
+
+        BoxLayout:
+            size_hint_y: None
+            height: 30
+
+            Button:
+                text: "Cancel"
+                on_release: root.cancel()
+
+            Button:
+                text: "Choose"
+                on_release: root.load(filechooser.path, filechooser.selection)
+
+<SaveDialog>:
+    text_input: text_input
+
+    BoxLayout:
+        size: root.size
+        pos: root.pos
+        orientation: "vertical"
+
+        FileChooserListView:
+            id: filechooser
+            on_selection: text_input.text = self.selection and self.selection[0] or ''
+
+        TextInput:
+            id: text_input
+            size_hint_y: None
+            height: 30
+            multiline: False
+
+        BoxLayout:
+            size_hint_y: None
+            height: 30
+
+            Button:
+                text: "Cancel"
+                on_release: root.cancel()
+
+            Button:
+                text: "Save"
+                on_release: root.save(filechooser.path, text_input.text)
