@@ -104,6 +104,7 @@ class alignment(object):
     def hunalign(self, l1_sentences, l2_sentences):
         """Using hunalign to alignment of sentences."""
         # To use hunalign - must save sentences to the files.
+        print l1_sentences
         l1_string = ""
         for sent in l1_sentences:
             l1_string += sent + "\n"
@@ -113,14 +114,18 @@ class alignment(object):
             l2_string += sent + "\n"
         save_file("hun2.tmp", l2_string[:-1:])
         # Start of hunalign
-        command = "hunalign-1.2/src/hunalign/hunalign hunalign-1.2/data/null.dic hun1.tmp hun2.tmp -bisent -text -utf > hunal.tmp"
+        command = "hunalign-1.2/src/hunalign/hunalign hunalign-1.2/data/null.dic hun1.tmp hun2.tmp -text -utf > hunal.tmp"
         return_code = call(command, shell=True)
         list_r = []
         f = open("hunal.tmp", 'r')
         for line in f:
             splitted_line = line.decode("utf-8").split("\t")
-            left = [splitted_line[0]]
-            right = [splitted_line[1]]
+            left = []
+            for sen in splitted_line[0].split(" ~~~ "):
+                left.append(sen)
+            right = []
+            for sen in splitted_line[1].split(" ~~~ "):
+                right.append(sen)
             list_r.append([left, right])
         f.close()
         return list_r

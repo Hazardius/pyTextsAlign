@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import codecs
 import os
 
 from kivy.app import App
@@ -86,8 +87,8 @@ class Root(FloatLayout):
 
     def save(self, path, filename):
         # self.alignment.save(os.path.join(path, filename), 'w')
-        with open(os.path.join(path, filename), 'w') as stream:
-            stream.write(self.tal_text.text)
+        with codecs.open(os.path.join(path, filename), 'w', 'utf-8') as stream:
+            stream.write(self.al_text.text)
 
         self.dismiss_popup()
 
