@@ -23,8 +23,10 @@ class alignment(object):
         """Constructor."""
         # sentences1 = ptiss(text1, l1_code)
         sentences1 = ptlss(text1, l1_code)
+        print "First file loaded."
         # sentences2 = ptiss(text2, l2_code)
         sentences2 = ptlss(text2, l2_code)
+        print "Files loaded."
         if al_type == 0:
             self.core = self.naive_alignment(sentences1, sentences2)
         elif al_type == 1:
@@ -62,6 +64,7 @@ class alignment(object):
     def naive_alignment(self, l1_sentences, l2_sentences):
         """Dumb way to align sentences. 1 to 1 till the end of sentences on both
         sides."""
+        print "Naive alignment started."
         sh = 1
         longer_l = len(l1_sentences)
         shorter_l = len(l2_sentences)
@@ -82,6 +85,7 @@ class alignment(object):
 
     def simple_alignment(self, l1_sentences, l2_sentences):
         """Simple but better than naive way to align sentences."""
+        print "Simple alignment started."
         l1i = 0
         l1len = len(l1_sentences)
         l2i = 0
@@ -100,12 +104,20 @@ class alignment(object):
             list_r.append([left, right])
             l1i = end_l1 + 1
             l2i = end_l2 + 1
+        print "End of one list of sentences."
+        if l1i < l1len:
+            for itera in range(l1len - l1i):
+                list_r.append([[l1_sentences[itera + l1i]], []])
+        elif l2i < l2len:
+            for itera in range(l2len - l2i):
+                list_r.append([[], [l2_sentences[itera + l2i]]])
+
         return list_r
 
     def hunalign(self, l1_sentences, l2_sentences):
         """Using hunalign to alignment of sentences."""
+        print "hunalign started."
         # To use hunalign - must save sentences to the files.
-        print l1_sentences
         l1_string = ""
         for sent in l1_sentences:
             l1_string += sent + "\n"
@@ -114,6 +126,7 @@ class alignment(object):
         for sent in l2_sentences:
             l2_string += sent + "\n"
         save_file("hun2.tmp", l2_string[:-1:])
+        print "Sentences saved in files."
         # Start of hunalign
         command = HUN_PATH + "/src/hunalign/hunalign " + HUN_PATH +\
             "/data/null.dic hun1.tmp hun2.tmp -text -utf > hunal.tmp"
