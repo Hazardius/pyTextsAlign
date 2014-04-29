@@ -6,6 +6,7 @@ import math
 
 from subprocess import call
 
+from config import HUN_PATH
 from pta_files import save_file
 from pta_sentence_splitting import psi_toolkit_api_sentence_splitting as ptiss
 from pta_sentence_splitting import psi_toolkit_local_sentence_splitting as ptlss
@@ -114,7 +115,8 @@ class alignment(object):
             l2_string += sent + "\n"
         save_file("hun2.tmp", l2_string[:-1:])
         # Start of hunalign
-        command = "hunalign-1.2/src/hunalign/hunalign hunalign-1.2/data/null.dic hun1.tmp hun2.tmp -text -utf > hunal.tmp"
+        command = HUN_PATH + "/src/hunalign/hunalign " + HUN_PATH +\
+            "/data/null.dic hun1.tmp hun2.tmp -text -utf > hunal.tmp"
         return_code = call(command, shell=True)
         list_r = []
         f = open("hunal.tmp", 'r')

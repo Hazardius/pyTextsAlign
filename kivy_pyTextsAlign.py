@@ -82,10 +82,12 @@ class Root(FloatLayout):
         if ((self.file_1_input.text != '') and (self.file_2_input != '')):
             self.alignment = alignment(self._check_atype_(), (self.file_1_input.text, self.file_1_lang.text),\
                 (self.file_2_input.text, self.file_2_lang.text))
+            # TODO: More visualy appealing kind of aligning for user.
             # self.show_alignment()
             self.al_text.text = self.alignment.get_core()
 
     def save(self, path, filename):
+        # TODO: After modifying alignement core directly - save it with alignment.save() .
         # self.alignment.save(os.path.join(path, filename), 'w')
         with codecs.open(os.path.join(path, filename), 'w', 'utf-8') as stream:
             stream.write(self.al_text.text)
