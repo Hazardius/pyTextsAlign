@@ -29,13 +29,22 @@ class SaveDialog(FloatLayout):
 
 class Root(FloatLayout):
     alignment = None
+
     loadfile = ObjectProperty(None)
     savefile = ObjectProperty(None)
+
     align_type = ObjectProperty(None)
+
     file_1_input = ObjectProperty(None)
     file_1_lang = ObjectProperty(None)
+    text1 = None
+    f2_changed = None
+
     file_2_input = ObjectProperty(None)
     file_2_lang = ObjectProperty(None)
+    text2 = None
+    f2_changed = None
+
     al_text = ObjectProperty(None)
 
     def dismiss_popup(self):
@@ -55,6 +64,7 @@ class Root(FloatLayout):
     def choose_file_1(self, path, filename):
         file_1_path = os.path.join(path, filename[0])
         self.file_1_input.text = file_1_path
+        self.f1_changed = True
 
         self.dismiss_popup()
 
@@ -66,6 +76,7 @@ class Root(FloatLayout):
     def choose_file_2(self, path, filename):
         file_2_path = os.path.join(path, filename[0])
         self.file_2_input.text = file_2_path
+        self.f2_changed = True
 
         self.dismiss_popup()
 
@@ -79,12 +90,26 @@ class Root(FloatLayout):
             return atype.HUNALIGN
 
     def align(self):
-        if ((self.file_1_input.text != '') and (self.file_2_input != '')):
-            self.alignment = alignment(self._check_atype_(), (self.file_1_input.text, self.file_1_lang.text),\
-                (self.file_2_input.text, self.file_2_lang.text))
+        if ((self.file_1_input.text != '') and (self.file_2_input.text != '')):
+            if self.f1_changed == True:
+                print "Opening first file."
+                with open(self.file_1_input.text) as f_in:
+                    self.text1 = '\n'.join(filter(None, (line.rstrip() for line in f_in)))
+                print "First file opened."
+            if self.f2_changed == True:
+                print "Opening second file."
+                with open(self.file_2_input.text) as f_in:
+                    self.text2 = '\n'.join(filter(None, (line.rstrip() for line in f_in)))
+                print "Second file opened."
+            
+            self.alignment = alignment(self._check_atype_(), (self.text1, self.file_1_lang.text),\
+                (self.text2, self.file_2_lang.text))
             # TODO: More visualy appealing kind of aligning for user.
             # self.show_alignment()
             self.al_text.text = self.alignment.get_core()
+
+            self.f1_changed = False
+            self.f2_changed = False
 
     def save(self, path, filename):
         # TODO: After modifying alignement core directly - save it with alignment.save() .

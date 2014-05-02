@@ -7,20 +7,27 @@ import urllib2
 import string
 import sys
 
+import PSIToolkit
+
 from pta_files import open_file
 from subprocess import call
 
 """ This file contains sentence splitting methods used by a pyTextsAlign. """
 
+def psi_toolkit_py_sentence_splitting(text, l_code):
+    psi = PSIToolkit.PipeRunner('segment --lang ' + l_code + ' ! json-simple-writer --tags segment')
+    return json.loads(psi.run(text))
+
 def psi_toolkit_local_sentence_splitting(path, l_code):
     command = "cat \"" + path + "\" | psi-pipe segment --lang " + l_code + " ! json-simple-writer --tags segment > tmp.tmp"
     return_code = call(command, shell=True)
-    f = open("tmp.tmp", 'r')
     ret_val = ""
-    for line in f:
-        if len(line) > 1:
-            ret_val += line.decode("utf-8-sig")
-    f.close()
+    # with open("tmp.tmp") as f_in:
+    #     ret_val = f_in.read().replace("\n\n", "\n")
+    with open("tmp.tmp", 'r') as f:
+        for line in f:
+            if len(line) > 1:
+                ret_val += line.decode("utf-8-sig")
     list_ret = ret_val[2:-2:].replace('","', "@|@").split("@|@")
     return [string.lstrip(sentence) for sentence in list_ret]
 

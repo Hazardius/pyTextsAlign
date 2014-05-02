@@ -10,6 +10,7 @@ from config import HUN_PATH
 from pta_files import save_file
 from pta_sentence_splitting import psi_toolkit_api_sentence_splitting as ptiss
 from pta_sentence_splitting import psi_toolkit_local_sentence_splitting as ptlss
+from pta_sentence_splitting import psi_toolkit_py_sentence_splitting as ptpss
 from pta_tools import count_word_number, enum
 
 """ This file contains alignement methods used by a pyTextsAlign. """
@@ -21,12 +22,24 @@ class alignment(object):
     """Simple alignment class."""
     def __init__(self, al_type, (text1, l1_code), (text2, l2_code)):
         """Constructor."""
+
+        # Tests
+        # import timeit
+        # start = timeit.default_timer()
+
+        sentences1 = ptpss(text1, l1_code)
         # sentences1 = ptiss(text1, l1_code)
-        sentences1 = ptlss(text1, l1_code)
-        print "First file loaded."
+        # sentences1 = ptlss(text1, l1_code)
+        print "First text divided into sentences."
+        sentences2 = ptpss(text2, l2_code)
         # sentences2 = ptiss(text2, l2_code)
-        sentences2 = ptlss(text2, l2_code)
-        print "Files loaded."
+        # sentences2 = ptlss(text2, l2_code)
+        print "Texts divided into sentences."
+
+        # Tests
+        # stop = timeit.default_timer()
+        # print "Time = " + str(stop - start)
+
         if al_type == 0:
             self.core = self.naive_alignment(sentences1, sentences2)
         elif al_type == 1:
